@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>对称密码算法</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f7e5;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    select, input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .container {
+      display: none;
+    }
+    .visible {
+      display: block;
+    }
+  </style>
+  <script>
+    function showAlgorithmForm() {
+      const selectedAlgorithm = document.getElementById("algorithm").value;
+      document.querySelectorAll(".container").forEach(container => {
+        container.classList.remove("visible");
+      });
+      if (selectedAlgorithm) {
+        document.getElementById(selectedAlgorithm.toLowerCase() + "Form").classList.add("visible");
+      }
+    }
+    function toggleRC6IVInput() {
+      const mode = document.getElementById("rc6Mode").value;
+      const ivInput = document.getElementById("rc6IVInput");
+      ivInput.style.display = mode === "CBC" ? "block" : "none";
+    }
+  </script>
+</head>
+<body>
+<div style="position: absolute; top: 10px; left: 10px;">
+  <a href="/" style="text-decoration: none; color: #007bff; font-size: 14px;">BACK</a>
+</div>
+<h1>对称密码算法</h1>
+
+<!-- 对称加密算法选择表单 -->
+<form action="/symmetric" method="post">
+  <label for="algorithm">选择算法:</label>
+  <select name="algorithm" id="algorithm" onchange="showAlgorithmForm()">
+    <option value="" selected disabled>请选择算法</option>
+    <option value="AES">AES</option>
+    <option value="SM4">SM4</option>
+    <option value="RC6">RC6</option>
+  </select>
+</form>
+
+<hr>
+
+<!-- AES 加解密工具 -->
+<div class="container" id="aesForm">
+  <h2>AES 加解密工具</h2>
+  <form action="/aes" method="post">
+    <label for="aesMode">选择模式:</label>
+    <select name="mode" id="aesMode">
+      <option value="CBC">CBC</option>
+      <option value="CFB">CFB</option>
+      <option value="OFB">OFB</option>
+      <option value="CTR">CTR</option>
+      <option value="GCM">GCM</option>
+      <option value="ECB">ECB</option>
+    </select>
+    <label for="aesKey">输入密钥:</label>
+    <textarea id="aesKey" name="key"></textarea>
+    <label for="keylength">密钥长度:</label>
+    <select name="keylength" id="keylength">
+      <option value="128">128bits</option>
+      <option value="192">192bits</option>
+      <option value="256">256bits</option>
+    </select>
+    <label for="keyFormat">密钥格式:</label>
+    <select name="keyFormat" id="keyFormatAES">
+      <option value="Hex">Hex</option>
+      <option value="UTF8">UTF8</option>
+      <option value="Latin1">Latin1</option>
+      <option value="Base64">Base64</option>
+    </select>
+    <label for="iv">输入 IV:</label>
+    <textarea id="ivAES" name="iv"></textarea>
+    <label for="ivFormat">IV 格式:</label>
+    <select name="ivFormat" id="ivFormatAES">
+      <option value="Hex">Hex</option>
+      <option value="UTF8">UTF8</option>
+      <option value="Latin1">Latin1</option>
+      <option value="Base64">Base64</option>
+    </select>
+    <label for="inputFormat">输入格式:</label>
+    <select name="inputFormat" id="inputFormatAES">
+      <option value="Raw">Raw</option>
+      <option value="Hex">Hex</option>
+    </select>
+    <label for="outputFormat">输出格式:</label>
+    <select name="outputFormat" id="outputFormatAES">
+      <option value="Raw">Raw</option>
+      <option value="Hex">Hex</option>
+    </select>
+    <label for="aesText">输入文本:</label>
+    <textarea id="aesText" name="text"></textarea>
+    <label for="aesAction">操作:</label>
+    <select name="action" id="aesAction">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+
+<!-- SM4 加解密工具 -->
+<div class="container" id="sm4Form">
+  <h2>SM4 加解密工具</h2>
+  <form action="/sm4" method="post">
+    <label for="sm4Mode">选择模式:</label>
+    <select name="mode" id="sm4Mode">
+      <option value="CBC">CBC</option>
+      <option value="CFB">CFB</option>
+      <option value="OFB">OFB</option>
+      <option value="CTR">CTR</option>
+      <option value="ECB">ECB</option>
+    </select>
+    <label for="sm4Key">输入密钥:</label>
+    <textarea id="sm4Key" name="key"></textarea>
+    <label for="keyFormat">密钥格式:</label>
+    <select name="keyFormat" id="keyFormat">
+      <option value="Hex">Hex</option>
+      <option value="UTF8">UTF8</option>
+      <option value="Latin1">Latin1</option>
+      <option value="Base64">Base64</option>
+    </select>
+    <label for="iv">输入 IV:</label>
+    <textarea id="iv" name="key"></textarea>
+    <label for="ivFormat">IV 格式:</label>
+    <select name="ivFormat" id="ivFormat">
+      <option value="Hex">Hex</option>
+      <option value="UTF8">UTF8</option>
+      <option value="Latin1">Latin1</option>
+      <option value="Base64">Base64</option>
+    </select>
+    <label for="inputFormat">输入格式:</label>
+    <select name="inputFormat" id="inputFormat">
+      <option value="Raw">Raw</option>
+      <option value="Hex">Hex</option>
+    </select>
+    <label for="outputFormat">输出格式:</label>
+    <select name="outputFormat" id="outputFormat">
+      <option value="Raw">Raw</option>
+      <option value="Hex">Hex</option>
+    </select>
+    <label for="sm4Text">输入文本:</label>
+    <textarea id="sm4Text" name="text"></textarea>
+    <label for="sm4Action">操作:</label>
+    <select name="action" id="sm4Action">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+
+<!-- RC6 加解密工具 -->
+<div class="container" id="rc6Form">
+  <h2>RC6 加解密工具</h2>
+  <form action="/rc6" method="post">
+    <label for="rc6Mode">选择模式:</label>
+    <select name="mode" id="rc6Mode" onchange="toggleRC6IVInput()">
+      <option value="ECB">ECB</option>
+      <option value="CBC">CBC</option>
+    </select>
+    <div id="rc6IVInput" style="display: none;">
+      <label for="ivRC6">输入 IV (仅支持 0 或 128 bits):</label>
+      <textarea id="ivRC6" name="iv" pattern="^0$|^[0-9A-Fa-f]{32}$" title="IV 必须为 0 或 128 位 (16 字节 Hex)"></textarea>
+      <label for="ivFormat">IV 格式:</label>
+      <select name="ivFormat" id="ivFormatRC6">
+        <option value="Hex">Hex</option>
+        <option value="UTF8">UTF8</option>
+        <option value="Latin1">Latin1</option>
+        <option value="Base64">Base64</option>
+      </select>
+    </div>
+    <label for="rc6Key">输入密钥:</label>
+    <textarea id="rc6Key" name="key"></textarea>
+    <label for="keyFormat">密钥格式:</label>
+    <select name="keyFormat" id="keyFormatRC6">
+      <option value="Hex">Hex</option>
+      <option value="UTF8">UTF8</option>
+      <option value="Latin1">Latin1</option>
+      <option value="Base64">Base64</option>
+    </select>
+    <label for="inputFormat">输入格式:</label>
+    <select name="inputFormat" id="inputFormatRC6">
+      <option value="Raw">Raw</option>
+      <option value="Hex">Hex</option>
+    </select>
+    <label for="outputFormat">输出格式:</label>
+    <select name="outputFormat" id="outputFormatRC6">
+      <option value="Raw">Raw</option>
+      <option value="Hex">Hex</option>
+    </select>
+    <label for="rc6Text">输入文本:</label>
+    <textarea id="rc6Text" name="text"></textarea>
+    <label for="rc6Action">操作:</label>
+    <select name="action" id="rc6Action">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+<footer style="position: absolute; bottom: 10px; width: 100%; text-align: center; color: black;">
+  <b>Copyright@bupt.罗宇航</b>
+</footer>
+</body>
+</html>

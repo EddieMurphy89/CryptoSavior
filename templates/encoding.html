@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>编码工具</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f7e5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-top: 20px;
+      color: #333;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: #ffffff;
+      padding: 20px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    select, input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 80px;
+      line-height: 1.5;
+      resize: none;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 20px 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+  <script>
+    function showEncodingForm() {
+      const selectedEncoding = document.getElementById("encoding").value;
+      const forms = ["base32Form", "base58Form", "base64Form", "hexForm", "rot13Form", "unicodeForm", "urlForm", "utf8Form", "hex4base64Form"];
+      forms.forEach(form => {
+        document.getElementById(form).classList.add("hidden");
+      });
+      if (selectedEncoding) {
+        document.getElementById(selectedEncoding + "Form").classList.remove("hidden");
+      }
+    }
+  </script>
+</head>
+<body>
+<div style="position: absolute; top: 10px; left: 10px;">
+  <a href="/" style="text-decoration: none; color: #007bff; font-size: 14px;">BACK</a>
+</div>
+<h1>编码工具</h1>
+
+<!-- 编码选择表单 -->
+<form action="/encoding" method="post">
+  <label for="encoding">选择编码类型:</label>
+  <select name="encoding" id="encoding" onchange="showEncodingForm()">
+    <option value="" selected disabled>请选择编码类型</option>
+    <option value="base32">Base32</option>
+    <option value="base58">Base58</option>
+    <option value="base64">Base64</option>
+    <option value="hex">Hex</option>
+    <option value="rot13">ROT13</option>
+    <option value="unicode">Unicode</option>
+    <option value="url">URL</option>
+    <option value="utf8">UTF-8</option>
+    <option value="hex4base64">Base64/Hex</option> <!-- 添加此选项 -->
+  </select>
+</form>
+
+<hr>
+
+<!-- Base32 编码工具 -->
+<div class="container hidden" id="base32Form">
+  <h2>Base32 编码工具</h2>
+  <form action="/base32" method="post">
+    <label for="base32Text">输入文本:</label>
+    <textarea id="base32Text" name="text"></textarea>
+    <label for="base32Action">操作:</label>
+    <select name="action" id="base32Action">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+
+<!-- Base58 编码工具 -->
+<div class="container hidden" id="base58Form">
+  <h2>Base58 编码工具</h2>
+  <form action="/base58" method="post">
+    <label for="base58Text">输入文本:</label>
+    <textarea id="base58Text" name="text"></textarea>
+    <label for="base58Action">操作:</label>
+    <select name="action" id="base58Action">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+
+<!-- Base64 编码工具 -->
+<div class="container hidden" id="base64Form">
+  <h2>Base64 编码工具</h2>
+  <form action="/base64" method="post">
+    <label for="base64Text">输入文本:</label>
+    <textarea id="base64Text" name="text"></textarea>
+    <label for="base64Action">操作:</label>
+    <select name="action" id="base64Action">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+
+<!-- Hex 编码工具 -->
+<div class="container hidden" id="hexForm">
+  <h2>Hex 编码工具</h2>
+  <form action="/hex" method="post">
+    <label for="hexText">输入文本:</label>
+    <textarea id="hexText" name="text"></textarea>
+    <label for="hexAction">操作:</label>
+    <select name="action" id="hexAction">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+
+<!-- ROT13 编码工具 -->
+<div class="container hidden" id="rot13Form">
+  <h2>ROT13 编码工具</h2>
+  <form action="/rot13" method="post">
+    <label for="rot13Text">输入文本:</label>
+    <textarea id="rot13Text" name="text"></textarea>
+    <label for="rot13Action">操作:</label>
+    <select name="action" id="rot13Action">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+
+<!-- Unicode 编码工具 -->
+<div class="container hidden" id="unicodeForm">
+  <h2>Unicode 编码工具</h2>
+  <form action="/unicode" method="post">
+    <label for="unicodeText">输入文本:</label>
+    <textarea id="unicodeText" name="text"></textarea>
+    <label for="unicodeAction">操作:</label>
+    <select name="action" id="unicodeAction">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+
+<!-- URL 编码工具 -->
+<div class="container hidden" id="urlForm">
+  <h2>URL 编码工具</h2>
+  <form action="/url" method="post">
+    <label for="urlText">输入文本:</label>
+    <textarea id="urlText" name="text"></textarea>
+    <label for="urlAction">操作:</label>
+    <select name="action" id="urlAction">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+
+<!-- UTF-8 编码工具 -->
+<div class="container hidden" id="utf8Form">
+  <h2>UTF-8 编码工具</h2>
+  <form action="/utf8" method="post">
+    <label for="utf8Text">输入文本:</label>
+    <textarea id="utf8Text" name="text"></textarea>
+    <label for="utf8Action">操作:</label>
+    <select name="action" id="utf8Action">
+      <option value="encrypt">加密</option>
+      <option value="decrypt">解密</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+
+<!-- Base64/Hex 转换工具 -->
+  <div class="container hidden" id="hex4base64Form">
+  <h2>Base64/Hex 转换工具</h2>
+  <form action="/hex4base64" method="post">
+    <label for="hex4base64Text">输入文本:</label>
+    <textarea id="hex4base64Text" name="text"></textarea>
+    <label for="hex4base64Action">操作:</label>
+    <select name="action" id="hex4base64Action">
+      <option value="hex2base64">Hex 转 Base64</option>
+      <option value="base642hex">Base64 转 Hex</option>
+    </select>
+    <button type="submit">提交</button>
+  </form>
+</div>
+<footer style="position: absolute; bottom: 10px; width: 100%; text-align: center; color: black;">
+  <b>Copyright@bupt.罗宇航</b>
+</footer>
+</body>
+</html>

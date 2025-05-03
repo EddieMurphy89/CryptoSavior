@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>公钥密码算法</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f7e5;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        select, input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            display: none;
+        }
+        .visible {
+            display: block;
+        }
+    </style>
+    <script>
+        function showAlgorithmForm() {
+            const selectedAlgorithm = document.getElementById("algorithm").value;
+            document.querySelectorAll(".container").forEach(container => {
+                container.style.display = "none";
+            });
+            if (selectedAlgorithm) {
+                document.getElementById(selectedAlgorithm + "Form").style.display = "block";
+            }
+        }
+
+        function toggleKeyInput(formId) {
+            const action = document.getElementById(formId + "Action").value;
+            document.getElementById(formId + "PublicKey").style.display = action === "encrypt" || action === "verify" ? "block" : "none";
+            document.getElementById(formId + "PrivateKey").style.display = action === "decrypt" || action === "sign" ? "block" : "none";
+            document.getElementById(formId + "Signature").style.display = action === "verify" ? "block" : "none";
+        }
+    </script>
+</head>
+<body>
+<div style="position: absolute; top: 10px; left: 10px;">
+    <a href="/" style="text-decoration: none; color: #007bff; font-size: 14px;">BACK</a>
+</div>
+<h1>公钥密码算法</h1>
+
+<!-- 公钥算法选择表单 -->
+<form>
+    <label for="algorithm">选择算法:</label>
+    <select name="algorithm" id="algorithm" onchange="showAlgorithmForm()">
+        <option value="" selected disabled>请选择算法</option>
+        <option value="rsa1024">RSA-1024bit</option>
+        <option value="ecc160">ECC-160bit</option>
+        <option value="rsaSha1">RSA-SHA1</option>
+        <option value="ecdsa">ECDSA</option>
+    </select>
+</form>
+
+<hr>
+
+<!-- RSA-1024bit -->
+<div class="container" id="rsa1024Form">
+    <h2>RSA-1024bit 加解密工具</h2>
+    <form action="/rsa1024" method="post">
+        <label for="rsa1024Action">操作:</label>
+        <select name="action" id="rsa1024Action" onchange="toggleKeyInput('rsa1024')">
+            <option value="" selected disabled>请选择加解密</option>
+            <option value="encrypt">加密</option>
+            <option value="decrypt">解密</option>
+        </select>
+        <div id="rsa1024PublicKey" style="display: none;">
+            <label for="rsa1024PublicKeyInput">输入公钥(base64):</label>
+            <input type="text" id="rsa1024PublicKeyInput" name="publicKey">
+        </div>
+        <div id="rsa1024PrivateKey" style="display: none;">
+            <label for="rsa1024PrivateKeyInput">输入私钥(base64):</label>
+            <input type="text" id="rsa1024PrivateKeyInput" name="privateKey">
+        </div>
+        <label for="rsa1024Text">输入文本:</label>
+        <textarea id="rsa1024Text" name="text" rows="4" style="resize: both;"></textarea>
+        <button type="submit">提交</button>
+    </form>
+    <form action="/generate_rsa" method="post">
+        <button type="submit">生成密钥对</button>
+    </form>
+</div>
+
+<!-- ECC-160bit -->
+<div class="container" id="ecc160Form">
+    <h2>ECC-160bit 加解密工具</h2>
+    <form action="/ecc160" method="post">
+        <label for="ecc160Curve">选择加解密曲线:</label>
+        <select name="curve" id="ecc160Curve_ende">
+            <option value="secp160r1">secp160r1</option>
+            <option value="secp160r2">secp160r2</option>
+        </select>
+        <label for="ecc160Action">操作:</label>
+        <select name="action" id="ecc160Action" onchange="toggleKeyInput('ecc160')">
+            <option value="" selected disabled>请选择加解密</option>
+            <option value="encrypt">加密</option>
+            <option value="decrypt">解密</option>
+        </select>
+        <div id="ecc160PublicKey" style="display: none;">
+            <label for="ecc160PublicKeyInput">输入公钥:</label>
+            <input type="text" id="ecc160PublicKeyInput" name="publicKey">
+        </div>
+        <div id="ecc160PrivateKey" style="display: none;">
+            <label for="ecc160PrivateKeyInput">输入私钥:</label>
+            <input type="text" id="ecc160PrivateKeyInput" name="privateKey">
+        </div>
+        <label for="ecc160Text">输入文本:</label>
+        <textarea id="ecc160Text" name="text" rows="4" style="resize: both;"></textarea>
+        <button type="submit">提交</button>
+    </form>
+    <form action="/generate_ecc160" method="post">
+        <label for="ecc160Curve">选择密钥对曲线:</label>
+        <select name="curve" id="ecc160Curve">
+            <option value="secp160r1">secp160r1</option>
+            <option value="secp160r2">secp160r2</option>
+        </select>
+        <button type="submit">生成密钥对</button>
+    </form>
+</div>
+
+<!-- RSA-SHA1 -->
+<div class="container" id="rsaSha1Form">
+    <h2>RSA-SHA1 签名工具</h2>
+    <form action="/rsaSha1" method="post">
+        <label for="rsaSha1Action">操作:</label>
+        <select name="action" id="rsaSha1Action" onchange="toggleKeyInput('rsaSha1')">
+            <option value="" selected disabled>请选择签名/验签</option>
+            <option value="sign">签名</option>
+            <option value="verify">验签</option>
+        </select>
+        <div id="rsaSha1PublicKey" style="display: none;">
+            <label for="rsaSha1PublicKeyInput">输入公钥:</label>
+            <textarea id="rsaSha1PublicKeyInput" name="publicKey" rows="4" style="resize: both;"></textarea>
+        </div>
+        <div id="rsaSha1PrivateKey" style="display: none;">
+            <label for="rsaSha1PrivateKeyInput">输入私钥:</label>
+            <textarea id="rsaSha1PrivateKeyInput" name="privateKey" rows="4" style="resize: both;"></textarea>
+        </div>
+        <label for="rsaSha1Text">输入文本:</label>
+        <input type="text" id="rsaSha1Text" name="text">
+        <div id="rsaSha1Signature" style="display: none;">
+            <label for="rsaSha1SignatureInput">输入签名:</label>
+            <textarea id="rsaSha1SignatureInput" name="signature" rows="4" style="resize: both;"></textarea>
+        </div>
+        <button type="submit">提交</button>
+    </form>
+    <form action="/generate_rsa" method="post">
+        <button type="submit">生成密钥对</button>
+    </form>
+</div>
+
+<!-- ECDSA -->
+<div class="container" id="ecdsaForm">
+    <h2>ECDSA 签名工具</h2>
+    <form action="/ecdsa" method="post">
+        <label for="ecdsaCurve">选择加解密曲线:</label>
+        <select name="curve" id="ecdsaCurve_ende">
+            <option value="P224">P224</option>
+            <option value="P256">P256</option>
+            <option value="P384">P384</option>
+            <option value="P521">P521</option>
+        </select>
+        <label for="ecdsaAction">操作:</label>
+        <select name="action" id="ecdsaAction" onchange="toggleKeyInput('ecdsa')">
+            <option value="" selected disabled>请选择签名/验签</option>
+            <option value="sign">签名</option>
+            <option value="verify">验证</option>
+        </select>
+        <div id="ecdsaPublicKey" style="display: none;">
+            <label for="ecdsaPublicKeyInput">输入公钥:</label>
+            <textarea id="ecdsaPublicKeyInput" name="publicKey" rows="4" style="resize: both;"></textarea>
+        </div>
+        <div id="ecdsaPrivateKey" style="display: none;">
+            <label for="ecdsaPrivateKeyInput">输入私钥:</label>
+            <textarea id="ecdsaPrivateKeyInput" name="privateKey" rows="4" style="resize: both;"></textarea>
+        </div>
+        <div id="ecdsaSignature" style="display: none;">
+            <label for="ecdsaSignatureInput">输入签名:</label>
+            <textarea id="ecdsaSignatureInput" name="signature" rows="4" style="resize: both;"></textarea>
+        </div>
+        <label for="ecdsaText">输入文本:</label>
+        <input type="text" id="ecdsaText" name="text">
+        <button type="submit">提交</button>
+    </form>
+    <form action="/generate_ecdsa" method="post">
+        <label for="ecdsaCurve">选择密钥对曲线:</label>
+        <select name="curve" id="ecdsaCurve">
+            <option value="P224">P224</option>
+            <option value="P256">P256</option>
+            <option value="P384">P384</option>
+            <option value="P521">P521</option>
+        </select>
+        <button type="submit">生成密钥对</button>
+    </form>
+</div>
+<footer style="position: absolute; bottom: 10px; width: 100%; text-align: center; color: black;">
+    <b>Copyright@bupt.罗宇航</b>
+</footer>
+</body>
+</html>
